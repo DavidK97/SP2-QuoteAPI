@@ -3,6 +3,7 @@ package app.daos;
 import java.util.List;
 
 public interface IDAO<T, I> {
+
     T read(I i);
 
     List<T> readAll();
@@ -13,5 +14,5 @@ public interface IDAO<T, I> {
 
     void delete(I i);
 
-    // boolean validatePrimaryKey(I i);
+    boolean validatePrimaryKey(I i);
 }
