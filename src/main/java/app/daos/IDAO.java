@@ -3,6 +3,7 @@ package app.daos;
 import java.util.List;
 
 public interface IDAO<T, I> {
+
     T read(I i);
 
     List<T> readAll();

@@ -1,6 +1,7 @@
 package app.entities;
 
 
+import app.config.dtos.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,12 +9,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 @EqualsAndHashCode
-
 @Entity
 public class Category {
     @Id
@@ -28,5 +29,10 @@ public class Category {
     @EqualsAndHashCode.Exclude // Sikrer mod stackOwerflow-error
     @ToString.Exclude // Sikrer mod stackOwerflow-error
     private Set<Quote> quotes = new HashSet<>();
+
+    public Category(CategoryDTO categoryDTO) {
+        this.id = categoryDTO.getId();
+        this.title = categoryDTO.getTitle();
+    }
 
 }
