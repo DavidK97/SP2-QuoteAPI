@@ -57,7 +57,6 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
 
             quote.setText(quoteDTO.getText());
             quote.setCreatedAt(quoteDTO.getCreatedAt());
-            quote.setAuthor(quoteDTO.getAuthor());
 
             Quote mergedQuote = em.merge(quote);
             em.getTransaction().commit();

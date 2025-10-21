@@ -1,6 +1,7 @@
-package app.daos;
+package app.daos.impl;
 
 import app.config.dtos.CategoryDTO;
+import app.daos.IDAO;
 import app.entities.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -65,6 +66,14 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
                 em.remove(category);
             }
             em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public boolean validatePrimaryKey(Integer integer) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Category category = em.find(Category.class, integer);
+            return category != null;
         }
     }
 }
