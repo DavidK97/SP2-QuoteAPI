@@ -14,5 +14,5 @@ public interface IDAO<T, I> {
 
     void delete(I i);
 
-    // boolean validatePrimaryKey(I i);
+    boolean validatePrimaryKey(I i);
 }
