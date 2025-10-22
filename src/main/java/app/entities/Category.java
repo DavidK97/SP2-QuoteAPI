@@ -1,7 +1,7 @@
 package app.entities;
 
 
-import app.config.dtos.CategoryDTO;
+import app.dtos.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
