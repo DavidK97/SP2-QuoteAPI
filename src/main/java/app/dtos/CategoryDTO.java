@@ -1,15 +1,15 @@
 package app.dtos;
 
 import app.entities.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @Getter
+@ToString
+@EqualsAndHashCode
 public class CategoryDTO {
 
     private Integer id;

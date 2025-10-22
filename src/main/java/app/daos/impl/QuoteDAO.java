@@ -70,6 +70,8 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
             em.getTransaction().begin();
             Quote quote = em.find(Quote.class, integer);
             if (quote != null) {
+                // Slet tilknytning til users favorite quotes
+                quote.getFavoritedByUsers().forEach(user -> user.getFavoriteQuotes().remove(quote));
                 em.remove(quote);
             }
             em.getTransaction().commit();

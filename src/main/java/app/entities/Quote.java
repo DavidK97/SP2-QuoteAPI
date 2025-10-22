@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,9 +46,10 @@ public class Quote {
     @ManyToOne
     private User user;
 
-
     @ManyToMany(mappedBy = "favoriteQuotes")
     @Builder.Default
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<User> favoritedByUsers = new HashSet<>();
 
 
@@ -74,6 +76,6 @@ public class Quote {
 
     @PrePersist
     protected void prePersist() {
-        this.postedAt = LocalDateTime.now();
+        this.postedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // Så vi undgår nanosekunder og "fejl" i tests
     }
 }
