@@ -126,20 +126,17 @@ class CategoryDAOTest {
     void update() {
 
         //Arrange
+        CategoryDTO categoryDTO = categoryDAO.read(1);
 
 
 
         //Act
-
-
-
+        CategoryDTO dtoToUpdate = categoryDAO.update(2, categoryDTO);
 
 
 
         //Assert
-
-
-
+        assertEquals(categoryDTO.getTitle(), dtoToUpdate.getTitle());
 
     }
 
@@ -149,12 +146,11 @@ class CategoryDAOTest {
         //Arrange
 
 
-
-
         //Act
 
 
         //Assert
+
 
 
     }
