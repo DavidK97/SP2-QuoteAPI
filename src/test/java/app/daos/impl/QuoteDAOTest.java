@@ -7,6 +7,7 @@ import app.entities.Quote;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
@@ -128,13 +129,21 @@ class QuoteDAOTest {
     @Test
     void update() {
         // Arrange
+        QuoteDTO quoteInfoToUpdate = QuoteDTO.builder()
+                .text("Updated quote text")
+                .createdAt(LocalDate.of(2025, 10, 22))
+                .build();
 
         // Act
+        QuoteDTO updatedDTO = quoteDAO.update(q1.getId(), quoteInfoToUpdate);
 
         // Assert
-
-
+        assertNotNull(updatedDTO);
+        assertThat(updatedDTO.getId(), is(q1.getId()));
+        assertEquals("Updated quote text", updatedDTO.getText());
+        assertEquals(LocalDate.of(2025, 10, 22), updatedDTO.getCreatedAt());
     }
+
 
 
     @Test
@@ -146,11 +155,20 @@ class QuoteDAOTest {
         List<QuoteDTO> allQuotes = quoteDAO.readAll();
 
         // Assert
-        assertEquals(allQuotes.size(), 4);
+        assertEquals(4, allQuotes.size());
         assertThat(allQuotes, containsInAnyOrder(q2, q3, q4, q5));
     }
 
     @Test
     void validatePrimaryKey() {
+        // Arrange
+
+        // Act
+        boolean result = quoteDAO.validatePrimaryKey(q1.getId());
+        boolean result2 = quoteDAO.validatePrimaryKey(6);
+
+        // Assert
+        assertTrue(result);
+        assertFalse(result2);
     }
 }
