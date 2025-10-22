@@ -3,6 +3,7 @@ package app.dtos;
 import app.entities.Author;
 import app.entities.Category;
 import app.entities.Quote;
+import app.security.dtos.UserDTOShort;
 import app.security.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.bugelhartmann.UserDTO;
@@ -28,12 +29,12 @@ public class QuoteDTO {
     private LocalDateTime postedAt;
     private CategoryDTO category;
     private AuthorDTO author;
-    private UserDTO user;
+    private UserDTOShort user;
     private int favoritedCount; // For at undgå at overeksponere Userdata til frontend
 
     public QuoteDTO(Quote quote) {
         this.id = quote.getId();
-        this.user = new UserDTO(quote.getUser().getUsername(), quote.getUser().getPassword());
+        this.user = new UserDTOShort(quote.getUser());
         this.author = new AuthorDTO(quote.getAuthor());
         this.postedAt = quote.getPostedAt();
         this.category = new CategoryDTO(quote.getCategory());

@@ -1,5 +1,6 @@
 package app.config;
 
+import app.dtos.QuoteDTO;
 import app.entities.Author;
 import app.entities.Category;
 import app.entities.Quote;
@@ -10,12 +11,17 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuotePopulator {
 
-    public static void populate(EntityManagerFactory emf) {
+    public static List<QuoteDTO> populate(EntityManagerFactory emf) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
+
+        List<QuoteDTO> quoteDTOList = new ArrayList<>();
+        List<Quote> quoteList = new ArrayList<>();
 
         try {
             tx.begin();
@@ -129,12 +135,22 @@ public class QuotePopulator {
 
             tx.commit();
 
+            quoteList.add(q1);
+            quoteList.add(q2);
+            quoteList.add(q3);
+            quoteList.add(q4);
+            quoteList.add(q5);
+
+
             System.out.println("Database populated with sample data!");
+
+            quoteDTOList = QuoteDTO.toDTOList(quoteList);
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
             e.printStackTrace();
         } finally {
             em.close();
         }
+        return quoteDTOList;
     }
 }
