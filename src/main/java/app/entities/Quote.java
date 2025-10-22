@@ -47,7 +47,8 @@ public class Quote {
 
 
     @ManyToMany(mappedBy = "favoriteQuotes")
-    private Set<User> favoritedByUsers;
+    @Builder.Default
+    private Set<User> favoritedByUsers = new HashSet<>();
 
 
     public Quote(QuoteDTO quoteDTO) {
@@ -55,9 +56,11 @@ public class Quote {
         this.text = quoteDTO.getText();
         this.createdAt = quoteDTO.getCreatedAt();
         this.postedAt = quoteDTO.getPostedAt();
-        this.category = quoteDTO.getCategory();
-        this.author = quoteDTO.getAuthor();
-        this.user = quoteDTO.getUser();
+        this.category = new Category(quoteDTO.getCategory());
+        this.author = new Author(quoteDTO.getAuthor());
+        this.user = User.builder()
+                .username(quoteDTO.getUser().getUsername())
+                .build();
         this.favoritedByUsers = new HashSet<>();
     }
 

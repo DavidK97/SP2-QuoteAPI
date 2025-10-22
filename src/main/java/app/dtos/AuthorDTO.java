@@ -1,10 +1,7 @@
 package app.dtos;
 
 import app.entities.Author;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.time.LocalDate;
@@ -15,6 +12,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AuthorDTO {
 
     private int id;
