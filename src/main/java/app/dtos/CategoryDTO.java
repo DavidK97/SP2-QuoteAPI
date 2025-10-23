@@ -7,10 +7,12 @@ import lombok.*;
 import java.util.List;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 public class CategoryDTO {
