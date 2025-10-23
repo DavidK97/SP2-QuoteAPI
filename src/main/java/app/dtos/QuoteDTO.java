@@ -11,16 +11,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-@AllArgsConstructor // Til Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class QuoteDTO {
     private Integer id;
