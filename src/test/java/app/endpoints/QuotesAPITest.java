@@ -2,10 +2,10 @@ package app.endpoints;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.config.QuotePopulator;
 import app.daos.impl.QuoteDAO;
 import app.dtos.QuoteDTO;
 import app.exceptions.ApiException;
+import app.populators.QuotePopulator;
 import app.security.daos.impl.SecurityDAO;
 import app.security.entities.User;
 import io.javalin.Javalin;
@@ -48,7 +48,6 @@ class QuotesAPITest {
         quoteDAO = new QuoteDAO(emf);
         app = ApplicationConfig.startServer(7076);
         this.quoteDTOList = new ArrayList<>();
-
     }
 
     @BeforeEach
@@ -75,6 +74,14 @@ class QuotesAPITest {
             throw new ApiException(500, "Populator doesnt work");
         }
 
+        // TODO test
+        System.out.println("Users in DB: " +
+                emf.createEntityManager()
+                        .createQuery("SELECT u FROM User u", User.class)
+                        .getResultList()
+        );
+
+
         // Login an Admin user and save token
         String loginJson = """
                 {
@@ -91,6 +98,7 @@ class QuotesAPITest {
                 .statusCode(200)
                 .extract()
                 .path("token");
+
     }
 
 

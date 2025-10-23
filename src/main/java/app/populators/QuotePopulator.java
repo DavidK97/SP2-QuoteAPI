@@ -1,4 +1,4 @@
-package app.config;
+package app.populators;
 
 import app.dtos.QuoteDTO;
 import app.entities.Author;

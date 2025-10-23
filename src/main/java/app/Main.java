@@ -2,7 +2,7 @@ package app;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.config.QuotePopulator;
+import app.populators.QuotePopulator;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
