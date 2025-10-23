@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @ToString
 @EqualsAndHashCode
-
+@Setter
 
 @Entity
 public class Quote {
@@ -40,7 +40,8 @@ public class Quote {
     private Category category;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @ManyToOne

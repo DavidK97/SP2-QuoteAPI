@@ -13,9 +13,8 @@ public class QuoteRoutes {
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            // get("/populate", hotelController::populate);
-            post("/", quoteController::create, Role.USER);
-            get("/", quoteController::readAll, Role.USER);
+            post("/", quoteController::create, Role.USER, Role.ADMIN);
+            get("/", quoteController::readAll, Role.USER, Role.ADMIN);
             get("/{id}", quoteController::read, Role.ANYONE);
             put("/{id}", quoteController::update, Role.ADMIN);
             delete("/{id}", quoteController::delete, Role.ADMIN);

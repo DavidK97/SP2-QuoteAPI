@@ -1,6 +1,7 @@
 package app.dtos;
 
 import app.entities.Author;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 @ToString
 @EqualsAndHashCode
 @Builder
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorDTO {
 
-    private int id;
+    private Integer id;
     private String name;
     private LocalDate dateOfBirth;
     private String country;
