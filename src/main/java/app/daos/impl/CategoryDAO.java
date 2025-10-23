@@ -63,6 +63,7 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
             em.getTransaction().begin();
             Category category = em.find(Category.class, id);
             if (category != null) {
+                category.getQuotes().forEach(q -> em.remove(q));
                 em.remove(category);
             }
             em.getTransaction().commit();

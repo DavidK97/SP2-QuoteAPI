@@ -8,8 +8,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CategoryDAOTest {
@@ -137,6 +141,8 @@ class CategoryDAOTest {
 
         //Assert
         assertEquals(categoryDTO.getTitle(), dtoToUpdate.getTitle());
+        assertThat(categoryDTO.getId(), is(1));
+        assertThat(dtoToUpdate.getId(), is(2));
 
     }
 
@@ -146,7 +152,14 @@ class CategoryDAOTest {
         //Arrange
 
 
+
         //Act
+        categoryDAO.delete(1);
+        List<CategoryDTO> newDtoList = categoryDAO.readAll();
+        assertThat(newDtoList.size(), is(2));
+        assertThat(newDtoList, containsInAnyOrder(c2, c3));
+
+
 
 
         //Assert
