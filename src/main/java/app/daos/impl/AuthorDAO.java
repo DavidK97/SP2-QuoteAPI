@@ -6,11 +6,12 @@ import app.entities.Author;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 
 import java.util.List;
 
-@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class AuthorDAO implements IDAO<AuthorDTO, Integer> {
 
     private static AuthorDAO instance;
