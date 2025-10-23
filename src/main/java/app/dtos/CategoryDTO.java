@@ -6,8 +6,10 @@ import lombok.*;
 import java.util.List;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 public class CategoryDTO {
