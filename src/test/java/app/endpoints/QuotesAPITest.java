@@ -1,3 +1,4 @@
+
 package app.endpoints;
 
 import app.config.ApplicationConfig;
@@ -10,19 +11,15 @@ import app.security.daos.impl.SecurityDAO;
 import app.security.entities.User;
 import io.javalin.Javalin;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 
 
@@ -42,10 +39,12 @@ class QuotesAPITest {
 
     private List<QuoteDTO> quoteDTOList;
 
+
     @BeforeAll
     public void setup() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
         quoteDAO = new QuoteDAO(emf);
+        securityDAO = new SecurityDAO(emf);
         app = ApplicationConfig.startServer(7076);
         this.quoteDTOList = new ArrayList<>();
     }
@@ -55,8 +54,15 @@ class QuotesAPITest {
         // Restart all tables
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.createNativeQuery("TRUNCATE TABLE author, category, quote, role, users, users_favorite_quotes, users_roles RESTART IDENTITY CASCADE")
-                    .executeUpdate();
+
+            em.createNativeQuery("TRUNCATE TABLE users_favorite_quotes RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE users_roles RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE quote RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE author RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE category RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE users RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE role RESTART IDENTITY CASCADE").executeUpdate();
+
             em.getTransaction().commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to truncate tables", e);
@@ -82,6 +88,9 @@ class QuotesAPITest {
         );
 
 
+        //securityDAO.createUser("admin", "admin123");
+        //securityDAO.addUserRole("admin", "ADMIN");
+
         // Login an Admin user and save token
         String loginJson = """
                 {
@@ -98,7 +107,6 @@ class QuotesAPITest {
                 .statusCode(200)
                 .extract()
                 .path("token");
-
     }
 
 
@@ -107,9 +115,10 @@ class QuotesAPITest {
         ApplicationConfig.stopServer(app);
 
         if (emf != null && emf.isOpen()) {
-            emf.close();
+            //emf.close();
         }
     }
+
 
 
     @Test
@@ -143,6 +152,8 @@ class QuotesAPITest {
                 .body("author.name", hasItems("Albert Einstein", "Mark Twain", "Maya Angelou"))
                 .body("category.title", hasItems("Life", "Motivation", "Humor"));
     }
+
+
 
     @Test
     void create() {
