@@ -2,6 +2,7 @@ package app.entities;
 
 import app.dtos.QuoteDTO;
 import app.security.entities.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +30,6 @@ public class Quote {
     @Setter
     private String text;
 
-    @Setter
     private LocalDate createdAt;
 
     private LocalDateTime postedAt;
