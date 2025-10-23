@@ -1,0 +1,110 @@
+### A simple get request to the test endpoint. No need for login
+GET {{url}}/auth/test/
+
+
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "user223",
+    "password": "test123"
+}
+
+### Login a user and get a Token in response that is saved in a global variable
+POST {{url}}/auth/login/
+
+{
+    "username": "admin",
+    "password": "admin123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+
+### Role.USER test
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+
+### POST request (create)
+POST {{url}}/poem/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### POST request (create)
+POST {{url}}/quotes/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "text": "Life is like riding a bicycle. To keep your balance, you must keep moving.",
+  "createdAt": "2025-10-22",
+  "category": {
+    "id": 2
+  },
+  "author": {
+    "name": "A Author",
+    "dateOfBirth": "1879-03-14",
+    "country": "Germany"
+  },
+  "user": {
+    "username": "admin"
+  }
+}
+
+### PUT request (Update)
+PUT {{url}}/quotes/2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "text": "Opdateret tekst",
+  "createdAt": "2025-10-02",
+  "category": {
+    "id": 2
+  },
+  "author": {
+    "name": "A Author",
+    "dateOfBirth": "1879-03-14",
+    "country": "Germany"
+  },
+  "user": {
+    "username": "admin"
+  }
+}
+
+### GET request (read)
+GET {{url}}/quotes/1
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### GET request (readAll)
+GET {{url}}/quotes/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### DELETE
+DELETE {{url}}/quotes/1/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+
+
+### Reset token
+GET {{url}}/auth/test/
+
+> {%
+    client.global.set("jwt_token", null);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}

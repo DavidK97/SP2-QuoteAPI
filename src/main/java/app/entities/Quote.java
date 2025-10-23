@@ -2,11 +2,13 @@ package app.entities;
 
 import app.dtos.QuoteDTO;
 import app.security.entities.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ import java.util.Set;
 @Builder
 @ToString
 @EqualsAndHashCode
-
+@Setter
 
 @Entity
 public class Quote {
@@ -28,7 +30,6 @@ public class Quote {
     @Setter
     private String text;
 
-    @Setter
     private LocalDate createdAt;
 
     private LocalDateTime postedAt;
@@ -39,15 +40,17 @@ public class Quote {
     private Category category;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @ManyToOne
     private User user;
 
-
     @ManyToMany(mappedBy = "favoriteQuotes")
     @Builder.Default
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<User> favoritedByUsers = new HashSet<>();
 
 
@@ -74,6 +77,6 @@ public class Quote {
 
     @PrePersist
     protected void prePersist() {
-        this.postedAt = LocalDateTime.now();
+        this.postedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // Så vi undgår nanosekunder og "fejl" i tests
     }
 }

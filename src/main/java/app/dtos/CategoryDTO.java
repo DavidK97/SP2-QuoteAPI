@@ -1,15 +1,20 @@
 package app.dtos;
 
 import app.entities.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 @Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class CategoryDTO {
 
     private Integer id;

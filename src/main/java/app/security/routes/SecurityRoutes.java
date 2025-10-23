@@ -20,6 +20,7 @@ public class SecurityRoutes {
         path("/auth",()-> {
             post("/login", securityController.login());
             post("/register", securityController.register());
+            get("/test", ctx->ctx.json(jsonMapper.createObjectNode().put("msg",  "Hello from Open Deployment")), Role.ANYONE);
         });
     };
     public EndpointGroup getSecuredRoutes(){
