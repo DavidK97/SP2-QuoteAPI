@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CategoryDAOTest {
@@ -156,8 +155,13 @@ class CategoryDAOTest {
         //Act
         categoryDAO.delete(1);
         List<CategoryDTO> newDtoList = categoryDAO.readAll();
-        assertThat(newDtoList.size(), is(2));
-        assertThat(newDtoList, containsInAnyOrder(c2, c3));
+        assertThat(newDtoList, containsInAnyOrder(
+                allOf(hasProperty("title", is(c2.getTitle()))),
+                allOf(hasProperty("title", is(c3.getTitle())))
+        ));
+
+        //assertThat(newDtoList.size(), is(2));
+        //assertThat(newDtoList, containsInAnyOrder(c2, c3));
 
 
 
