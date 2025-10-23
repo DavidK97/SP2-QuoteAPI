@@ -3,6 +3,8 @@ package app.daos.impl;
 import app.daos.IDAO;
 import app.dtos.CategoryDTO;
 import app.entities.Category;
+import app.entities.Quote;
+import app.security.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -58,11 +60,26 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
 
     @Override
     public void delete(Integer id) {
-
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Category category = em.find(Category.class, id);
+
             if (category != null) {
+                // Kopiér til ny liste for at undgå ConcurrentModification
+                var quotes = List.copyOf(category.getQuotes());
+
+                for (Quote q : quotes) {
+                    // Fjern quote fra alle brugeres favorit-lister (ManyToMany)
+                    var users = List.copyOf(q.getFavoritedByUsers());
+                    for (User u : users) {
+                        u.getFavoriteQuotes().remove(q);
+                    }
+                    // (valgfrit) fjern også fra kategoriens liste
+                    category.getQuotes().remove(q);
+
+                    // Nu kan quote fjernes sikkert
+                    em.remove(q);
+                }
                 em.remove(category);
             }
             em.getTransaction().commit();
