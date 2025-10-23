@@ -1,7 +1,7 @@
 package app.entities;
 
 
-import app.config.dtos.CategoryDTO;
+import app.dtos.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +33,7 @@ public class Category {
     public Category(CategoryDTO categoryDTO) {
         this.id = categoryDTO.getId();
         this.title = categoryDTO.getTitle();
+        this.quotes = new HashSet<>();
     }
 
 }

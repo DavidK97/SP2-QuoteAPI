@@ -56,6 +56,8 @@ public class User implements ISecurityUser {
         this.username = username;
         this.password = hashed;
         this.roles = new HashSet<>();
+        this.favoriteQuotes = new HashSet<>();
+        this.postedQuotes = new HashSet<>();
     }
 
 

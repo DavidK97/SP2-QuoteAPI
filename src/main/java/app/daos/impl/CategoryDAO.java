@@ -1,7 +1,7 @@
 package app.daos.impl;
 
-import app.config.dtos.CategoryDTO;
 import app.daos.IDAO;
+import app.dtos.CategoryDTO;
 import app.entities.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

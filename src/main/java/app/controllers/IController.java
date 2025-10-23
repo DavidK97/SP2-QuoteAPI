@@ -8,6 +8,6 @@ public interface IController<T, D> {
     void update(Context ctx);
     void delete(Context ctx);
 
-    // boolean validatePrimaryKey(D d);
-    // T validateEntity(Context ctx);
+     boolean validatePrimaryKey(D d);
+     T validateEntity(Context ctx);
 }

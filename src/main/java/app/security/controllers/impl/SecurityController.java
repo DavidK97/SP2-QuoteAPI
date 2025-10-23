@@ -77,14 +77,14 @@ public class SecurityController implements ISecurityController {
             User user = ctx.bodyAsClass(User.class);
 
             // 2. Alle Users får "User" role
-            Role userRole = new Role("User");
+            Role userRole = new Role("USER");
             user.addRole(userRole);
 
             // 3. User gemmes i DB
             User createdUser = securityDAO.createUser(user.getUsername(), user.getPassword());
 
             // 4. Role tilføjes til User i DB
-            User createdUserWithRole = securityDAO.addUserRole(createdUser.getUsername(), "User");
+            User createdUserWithRole = securityDAO.addUserRole(createdUser.getUsername(), "USER");
 
             // 5. Authenticate: Vi tjekker hvilke roller useren har og mapper dem til Strings
             Set<String> roles = createdUserWithRole
