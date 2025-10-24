@@ -2,8 +2,11 @@ package app;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
+
 import app.config.QuotePopulator;
 import app.populators.AuthorPopulator;
+import app.populators.QuotePopulator;
+
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -13,10 +16,16 @@ public class Main {
     public static void main(String[] args) {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
+
        // QuotePopulator.populate(emf);
        // AuthorPopulator.populate(emf);
 
         Javalin app = ApplicationConfig.startServer(7076);
         
+
+         QuotePopulator.populate(emf);
+
+        Javalin app = ApplicationConfig.startServer(7076);
+
     }
 }
