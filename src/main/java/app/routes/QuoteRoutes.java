@@ -10,7 +10,6 @@ import static io.javalin.apibuilder.ApiBuilder.delete;
 public class QuoteRoutes {
     private final QuoteController quoteController = new QuoteController();
 
-    //TODO angiv roller!!!
 
     protected EndpointGroup getRoutes() {
         return () -> {

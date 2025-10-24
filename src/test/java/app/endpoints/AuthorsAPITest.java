@@ -2,10 +2,10 @@ package app.endpoints;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.config.QuotePopulator;
 import app.daos.impl.AuthorDAO;
 import app.dtos.AuthorDTO;
 import app.populators.AuthorPopulator;
+import app.populators.QuotePopulator;
 import app.security.daos.impl.SecurityDAO;
 import io.javalin.Javalin;
 import io.restassured.RestAssured;

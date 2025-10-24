@@ -1,9 +1,9 @@
 package app.daos.impl;
 
 import app.config.HibernateConfig;
-import app.config.QuotePopulator;
 import app.dtos.CategoryDTO;
 import app.exceptions.ApiException;
+import app.populators.QuotePopulator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;

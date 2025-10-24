@@ -33,13 +33,18 @@ public class QuotePopulator {
 
             Role adminRole = new Role("ADMIN");
             Role userRole = new Role("USER");
+            Role anyoneRole = new Role("ANYONE");
 
             admin.addRole(adminRole);
             user1.addRole(userRole);
             user2.addRole(userRole);
 
-            em.persist(adminRole);
-            em.persist(userRole);
+            if (em.find(Role.class, "ADMIN") == null)
+                em.persist(new Role("ADMIN"));
+            if (em.find(Role.class, "USER") == null)
+                em.persist(new Role("USER"));
+            if (em.find(Role.class, "ANYONE") == null)
+                em.persist(new Role("ANYONE"));
             em.persist(admin);
             em.persist(user1);
             em.persist(user2);
