@@ -20,7 +20,7 @@
         <token.security.version>1.0.1</token.security.version>
 
         <!--  Javalin    -->
-        <javalin.port>7070</javalin.port>
+        <javalin.port>7076</javalin.port>
     </properties>
 
     <repositories>
