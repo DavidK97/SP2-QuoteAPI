@@ -3,7 +3,7 @@ package app;
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
 
-import app.config.QuotePopulator;
+
 import app.populators.AuthorPopulator;
 import app.populators.QuotePopulator;
 
@@ -17,15 +17,12 @@ public class Main {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
 
-       // QuotePopulator.populate(emf);
-       // AuthorPopulator.populate(emf);
-
-        Javalin app = ApplicationConfig.startServer(7076);
-        
-
-         QuotePopulator.populate(emf);
+        // QuotePopulator.populate(emf);
+        // AuthorPopulator.populate(emf);
 
         Javalin app = ApplicationConfig.startServer(7076);
 
+
+        QuotePopulator.populate(emf);
     }
 }

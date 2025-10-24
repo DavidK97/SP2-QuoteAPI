@@ -25,7 +25,7 @@ public class AuthorDAO implements IDAO<AuthorDTO, Integer> {
     public static AuthorDAO getInstance(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new AuthorDAO();
+            instance = new AuthorDAO(emf);
         }
         return instance;
     }

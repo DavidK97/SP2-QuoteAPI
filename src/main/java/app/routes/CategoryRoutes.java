@@ -13,7 +13,6 @@ public class CategoryRoutes {
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            // get("/populate", hotelController::populate);
             post("/", categoryController::create, Role.ANYONE);
             get("/", categoryController::readAll, Role.ANYONE);
             get("/{id}", categoryController::read, Role.ANYONE);
