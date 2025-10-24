@@ -12,6 +12,6 @@ public class Main {
 
          QuotePopulator.populate(emf);
 
-        Javalin app = ApplicationConfig.startServer(7076);
+        Javalin app = ApplicationConfig.startServer(7070);
     }
 }
