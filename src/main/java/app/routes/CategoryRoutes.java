@@ -19,6 +19,7 @@ public class CategoryRoutes {
             get("/{id}", categoryController::read, Role.ANYONE);
             put("/{id}", categoryController::update, Role.ANYONE);
             delete("/{id}", categoryController::delete, Role.ANYONE);
+            get("/", categoryController::getAllQuotesByCategory, Role.ANYONE);
         };
     }
 }
