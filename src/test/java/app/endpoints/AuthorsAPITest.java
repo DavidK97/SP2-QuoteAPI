@@ -76,11 +76,14 @@ class AuthorsAPITest {
         a3 = authors.get(2);
     }
 
+
     @AfterAll
     void tearDown() {
         ApplicationConfig.stopServer(app);
         if (emf != null && emf.isOpen()) emf.close();
     }
+
+
 
     @Test
     void read() {

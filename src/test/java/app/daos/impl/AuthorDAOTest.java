@@ -39,7 +39,6 @@ class AuthorDAOTest {
 
     @BeforeEach
     void setUp() {
-
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createNativeQuery("TRUNCATE TABLE author RESTART IDENTITY CASCADE").executeUpdate();
@@ -66,9 +65,7 @@ class AuthorDAOTest {
         if (emf != null && emf.isOpen()) {
 
             emf.close();
-
         }
-
     }
 
     @Test

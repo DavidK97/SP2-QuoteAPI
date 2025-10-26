@@ -17,8 +17,6 @@ public class Main {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
 
-        // QuotePopulator.populate(emf);
-        // AuthorPopulator.populate(emf);
 
         Javalin app = ApplicationConfig.startServer(7076);
 

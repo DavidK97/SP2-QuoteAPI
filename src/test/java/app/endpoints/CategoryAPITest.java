@@ -59,11 +59,14 @@ class CategoryAPITest {
         assertEquals(3, all.size());
     }
 
+
     @AfterAll
     void afterAll() {
         ApplicationConfig.stopServer(app);
         if (emf != null && emf.isOpen()) emf.close();
     }
+
+
 
     // ---------- HAPPY PATHS ----------
 
