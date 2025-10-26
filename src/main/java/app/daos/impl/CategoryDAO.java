@@ -96,17 +96,16 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
         }
     }
 
-    public List<QuoteDTO> getAllQuotesByCategory(String category) {
+    public List<QuoteDTO> getAllQuotesByCategory(int categoryId) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
                             "SELECT new app.dtos.QuoteDTO(q) " +
                                     "FROM Quote q " +
-                                    "WHERE LOWER(q.category.title) = LOWER(:title) " +
+                                    "WHERE q.category.id = :id " +
                                     "ORDER BY q.id",
                             QuoteDTO.class)
-                    .setParameter("title", category.trim())
+                    .setParameter("id", categoryId)
                     .getResultList();
-
         }
     }
 }

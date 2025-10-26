@@ -1,4 +1,4 @@
-/*package app.endpoints;
+package app.endpoints;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
@@ -68,7 +68,7 @@ class CategoryAPITest {
     // ---------- HAPPY PATHS ----------
 
     @Test
-    void read_ok() {
+    void read() {
         given()
                 .when()
                 .get("/categories/{id}", 1)
@@ -79,7 +79,7 @@ class CategoryAPITest {
     }
 
     @Test
-    void readAll_ok() {
+    void readAll() {
         given()
                 .when()
                 .get("/categories")
@@ -89,7 +89,7 @@ class CategoryAPITest {
     }
 
     @Test
-    void create_ok_201() {
+    void create() {
         String payload = """
             { "title": "Sports" }
         """;
@@ -106,7 +106,7 @@ class CategoryAPITest {
     }
 
     @Test
-    void update_ok_200() {
+    void update() {
         String payload = """
             { "title": "Funny" }
         """;
@@ -123,66 +123,11 @@ class CategoryAPITest {
     }
 
     @Test
-    void delete_ok_204() {
+    void delete() {
         given()
                 .when()
                 .delete("/categories/{id}", 3)
                 .then()
                 .statusCode(204);
     }
-
-    // ---------- NON-HAPPY PATHS ----------
-
-    @Test
-    void read_nonExisting_404() {
-        given()
-                .when()
-                .get("/categories/{id}", 999)
-                .then()
-                .statusCode(404)
-                .body(is("Not a valid id"));
-    }
-
-    @Test
-    void update_nonExisting_404() {
-        String payload = """
-            { "title": "X" }
-        """;
-
-        given()
-                .contentType("application/json")
-                .body(payload)
-                .when()
-                .put("/categories/{id}", 999)
-                .then()
-                .statusCode(404)
-                .body(is("Not a valid id"));
-    }
-
-    @Test
-    void delete_nonExisting_404() {
-        given()
-                .when()
-                .delete("/categories/{id}", 999)
-                .then()
-                .statusCode(404)
-                .body(is("Not a valid id"));
-    }
-
-    @Test
-    void create_invalidPayload_400() {
-        // tom title skal give 400
-        String payload = """
-            { "title": "" }
-        """;
-
-        given()
-                .contentType("application/json")
-                .body(payload)
-                .when()
-                .post("/categories")
-                .then()
-                .statusCode(400)
-                .body(is("Title must be set"));
-    }
-}*/
+}
