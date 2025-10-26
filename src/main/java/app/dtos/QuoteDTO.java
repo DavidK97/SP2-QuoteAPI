@@ -41,7 +41,12 @@ public class QuoteDTO {
     public QuoteDTO(Quote quote) {
         this.id = quote.getId();
         this.user = new UserDTOShort(quote.getUser());
-       // this.author = new AuthorDTO(quote.getAuthor());
+       this.author = AuthorDTO.builder()
+               .id(quote.getAuthor().getId())
+               .name(quote.getAuthor().getName())
+               .country(quote.getAuthor().getCountry())
+               .dateOfBirth(quote.getAuthor().getDateOfBirth())
+               .build();
         this.postedAt = quote.getPostedAt();
         this.category = new CategoryDTO(quote.getCategory());
         this.createdAt = quote.getCreatedAt();

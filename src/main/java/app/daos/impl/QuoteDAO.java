@@ -75,6 +75,7 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
                 author.setName(authorDTO.getName());
                 author.setDateOfBirth(authorDTO.getDateOfBirth());
                 author.setCountry(authorDTO.getCountry());
+                author.addQuote(quote);
                 em.persist(author);
             }
 
