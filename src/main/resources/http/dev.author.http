@@ -7,7 +7,7 @@ POST {{url}}/auth/register/
 Content-Type: application/json
 
 {
-  "username": "user123",
+  "username": "user223",
   "password": "test123"
 }
 
@@ -47,7 +47,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### Update (PUT) – opdater eksisterende forfatter
-PUT {{url}}/authors/1
+PUT {{url}}/authors/4
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
@@ -72,7 +72,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### Delete (DELETE) – slet forfatter
-DELETE {{url}}/authors/1
+DELETE {{url}}/authors/9
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -84,3 +84,35 @@ GET {{url}}/auth/test/
     client.global.set("jwt_token", null);
     console.log("JWT Token reset:", client.global.get("jwt_token"));
 %}
+
+
+### Printer author og alle authorens quotes
+GET {{url}}/authors/4/quotes
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Opret quote for eksisterende author
+POST {{url}}/quotes/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "text": "Imagination is more important than knowledge.",
+  "author": {
+    "id": 1
+  },
+  "category": {
+    "id": 1
+  },
+  "user": {
+    "username": "admin"
+  }
+}
+
+
+### Hent author med quotes igen for at teste respons
+GET {{url}}/authors/9/quotes
+Accept: application/json
+Authorization: Bearer {{jwt_token}}

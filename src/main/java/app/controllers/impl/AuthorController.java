@@ -3,13 +3,16 @@ package app.controllers.impl;
 import app.config.HibernateConfig;
 import app.controllers.IController;
 import app.daos.impl.AuthorDAO;
+import app.daos.impl.QuoteDAO;
 import app.dtos.AuthorDTO;
-import app.entities.Author;
+import app.dtos.QuoteDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AuthorController implements IController<AuthorDTO, Integer> {
 
@@ -22,106 +25,65 @@ public class AuthorController implements IController<AuthorDTO, Integer> {
 
     @Override
     public void read(Context ctx) {
-        // Id hentes fra client request
         int id = Integer.parseInt(ctx.pathParam("id"));
-
-        // Tjek om id er valid og findes i DB
-        boolean result = validatePrimaryKey(id);
-        if (!result) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            ctx.result("Not a valid id");
+        if (!validatePrimaryKey(id)) {
+            ctx.status(HttpStatus.NOT_FOUND).result("Not a valid id");
             return;
         }
-
-        // AuthorDTO hentes fra DB
         AuthorDTO authorDTO = authorDAO.read(id);
-
         if (authorDTO == null) {
             ctx.status(HttpStatus.NOT_FOUND).result("Author not found");
             return;
         }
-
-        // Respons sendes til client
-        ctx.status(HttpStatus.OK);
-        ctx.json(authorDTO);
+        ctx.status(HttpStatus.OK).json(authorDTO);
     }
 
     @Override
     public void readAll(Context ctx) {
-        // Hent liste fra DB
         List<AuthorDTO> allAuthors = authorDAO.readAll();
-
-        // Send response til klient
         if (!allAuthors.isEmpty()) {
-            ctx.status(HttpStatus.OK);
-            ctx.json(allAuthors);
+            ctx.status(HttpStatus.OK).json(allAuthors);
         } else {
-            ctx.status(HttpStatus.NOT_FOUND);
-            ctx.result("Error retrieving authors");
+            ctx.status(HttpStatus.NOT_FOUND).result("Error retrieving authors");
         }
     }
 
     @Override
     public void create(Context ctx) {
-        // Info hentes fra client request og valideres
         AuthorDTO jsonRequest = validateEntity(ctx);
-
-        // Author gemmes
         AuthorDTO createdAuthor = authorDAO.create(jsonRequest);
-
-        // Response til client
         if (createdAuthor != null) {
-            ctx.status(HttpStatus.CREATED);
-            ctx.json(createdAuthor);
+            ctx.status(HttpStatus.CREATED).json(createdAuthor);
         } else {
-            ctx.status(HttpStatus.BAD_REQUEST);
-            ctx.result("Something went wrong, author could not be created");
+            ctx.status(HttpStatus.BAD_REQUEST).result("Something went wrong, author could not be created");
         }
     }
 
     @Override
     public void update(Context ctx) {
-        // Info hentes fra client request
         int id = Integer.parseInt(ctx.pathParam("id"));
-        Author author = ctx.bodyAsClass(Author.class);
-
-        // Tjek om id er valid og findes i DB
-        boolean result = validatePrimaryKey(id);
-        if (!result) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            ctx.result("Not a valid id");
+        AuthorDTO authorDTO = new AuthorDTO(ctx.bodyAsClass(app.entities.Author.class));
+        if (!validatePrimaryKey(id)) {
+            ctx.status(HttpStatus.NOT_FOUND).result("Not a valid id");
             return;
         }
-
-        AuthorDTO updatedAuthorDTO = authorDAO.update(id, new AuthorDTO(author));
-
+        AuthorDTO updatedAuthorDTO = authorDAO.update(id, authorDTO);
         if (updatedAuthorDTO == null) {
             ctx.status(HttpStatus.NOT_FOUND).result("Author not found");
             return;
         }
-
-        // Response til client ved succes
-        ctx.status(HttpStatus.OK);
-        ctx.json(updatedAuthorDTO);
+        ctx.status(HttpStatus.OK).json(updatedAuthorDTO);
     }
 
     @Override
     public void delete(Context ctx) {
-        // Client request
         int id = Integer.parseInt(ctx.pathParam("id"));
-
-        // Tjek om id er valid og findes i DB
-        boolean result = validatePrimaryKey(id);
-        if (!result) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            ctx.result("Not a valid id, author could not be deleted");
-        } else {
-            authorDAO.delete(id);
-
-            // Response
-            ctx.status(HttpStatus.NO_CONTENT);
-            ctx.result("Author with id: " + id + " deleted");
+        if (!validatePrimaryKey(id)) {
+            ctx.status(HttpStatus.NOT_FOUND).result("Not a valid id, author could not be deleted");
+            return;
         }
+        authorDAO.delete(id);
+        ctx.status(HttpStatus.NO_CONTENT).result("Author with id: " + id + " deleted");
     }
 
     @Override
@@ -136,5 +98,27 @@ public class AuthorController implements IController<AuthorDTO, Integer> {
                 .check(a -> a.getCountry() != null && !a.getCountry().isEmpty(), "Not a valid author country")
                 .check(a -> a.getDateOfBirth() != null, "Not a valid date of birth")
                 .get();
+    }
+
+    public void readAuthorWithQuotes(Context ctx) {
+        try {
+            int authorId = Integer.parseInt(ctx.pathParam("id"));
+            if (!validatePrimaryKey(authorId)) {
+                ctx.status(404).result("Not a valid id");
+                return;
+            }
+            AuthorDTO authorDTO = authorDAO.read(authorId);
+            if (authorDTO == null) {
+                ctx.status(404).result("Author not found");
+                return;
+            }
+            List<QuoteDTO> quotes = authorDAO.readQuotesByAuthor(authorId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("author", authorDTO);
+            response.put("quotes", quotes != null ? quotes : List.of());
+            ctx.status(200).json(quotes);
+        } catch (Exception e) {
+            ctx.status(500).result("Internal server error: " + e.getMessage());
+        }
     }
 }

@@ -22,6 +22,9 @@ public class AuthorRoutes {
             put("/{id}", authorController::update, Role.ADMIN);
 
             delete("/{id}", authorController::delete, Role.ADMIN);
+
+            get("/{id}/quotes", authorController::readAuthorWithQuotes, Role.USER, Role.ADMIN);
+
         };
 
     }

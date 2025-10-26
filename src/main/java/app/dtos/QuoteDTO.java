@@ -41,7 +41,7 @@ public class QuoteDTO {
     public QuoteDTO(Quote quote) {
         this.id = quote.getId();
         this.user = new UserDTOShort(quote.getUser());
-        this.author = new AuthorDTO(quote.getAuthor());
+       // this.author = new AuthorDTO(quote.getAuthor());
         this.postedAt = quote.getPostedAt();
         this.category = new CategoryDTO(quote.getCategory());
         this.createdAt = quote.getCreatedAt();

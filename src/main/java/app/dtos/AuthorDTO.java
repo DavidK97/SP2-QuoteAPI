@@ -6,6 +6,8 @@ import lombok.*;
 
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,18 +26,16 @@ public class AuthorDTO {
     private String name;
     private LocalDate dateOfBirth;
     private String country;
-  //  private Set<QuoteDTO> quotes;
+    private Set<QuoteDTO> quotes;
 
     public AuthorDTO(Author author){
-
         this.id = author.getId();
         this.name = author.getName();
         this.dateOfBirth = author.getDateOfBirth();
         this.country = author.getCountry();
-       // this.quotes = author.getQuotes().stream()
-        //        .map(QuoteDTO::new)
-          //      .collect(Collectors.toSet());
-
+        this.quotes = author.getQuotes() != null ?
+                author.getQuotes().stream().map(QuoteDTO::new).collect(Collectors.toSet()) :
+                new HashSet<>();
     }
 
 }
