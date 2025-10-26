@@ -2,24 +2,33 @@ package app.daos.impl;
 
 import app.daos.IDAO;
 import app.dtos.AuthorDTO;
+import app.dtos.QuoteDTO;
 import app.entities.Author;
+import app.entities.Quote;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 
 import java.util.List;
 
-@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class AuthorDAO implements IDAO<AuthorDTO, Integer> {
 
     private static AuthorDAO instance;
     private static EntityManagerFactory emf;
 
+    public AuthorDAO(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
+
     public static AuthorDAO getInstance(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new AuthorDAO();
+            instance = new AuthorDAO(emf);
         }
         return instance;
     }
@@ -97,5 +106,15 @@ public class AuthorDAO implements IDAO<AuthorDTO, Integer> {
         }
 
     }
+
+    public List<QuoteDTO> readQuotesByAuthor(Integer authorId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Quote> query = em.createQuery(
+                    "SELECT q FROM Quote q WHERE q.author.id = :authorId", Quote.class);
+            query.setParameter("authorId", authorId);
+            return QuoteDTO.toDTOList(query.getResultList());
+        }
+    }
+
 
 }

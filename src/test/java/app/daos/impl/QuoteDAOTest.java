@@ -66,12 +66,14 @@ class QuoteDAOTest {
         }
     }
 
+
     @AfterAll
     void tearDown() {
         if (emf != null && emf.isOpen()) {
             emf.close();
         }
     }
+
 
     @Test
     void getInstance () {

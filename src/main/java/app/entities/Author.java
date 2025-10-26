@@ -45,4 +45,11 @@ public class Author {
 
     }
 
+    public void addQuote (Quote quote) {
+        this.quotes.add(quote);
+        if (quote != null) {
+            quote.setAuthor(this);
+        }
+    }
+
 }

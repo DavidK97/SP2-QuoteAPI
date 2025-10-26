@@ -1,0 +1,118 @@
+### Test endpoint (ingen login kræves)
+GET {{url}}/auth/test/
+
+
+### Opret ny bruger (får automatisk USER-rolle)
+POST {{url}}/auth/register/
+Content-Type: application/json
+
+{
+  "username": "user223",
+  "password": "test123"
+}
+
+
+### Login som admin og gem JWT-token
+POST {{url}}/auth/login/
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+
+### Test adgang med USER-rolle
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Create (POST) – opret ny forfatter
+POST {{url}}/authors/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Albert Einstein",
+  "dateOfBirth": "1879-03-14",
+  "country": "Germany"
+}
+
+
+### Update (PUT) – opdater eksisterende forfatter
+PUT {{url}}/authors/4
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Albert Einstein Jr.",
+  "dateOfBirth": "1879-03-15",
+  "country": "Switzerland"
+}
+
+
+### Read (GET) – hent specifik forfatter
+GET {{url}}/authors/1
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Read All (GET) – hent alle forfattere
+GET {{url}}/authors/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Delete (DELETE) – slet forfatter
+DELETE {{url}}/authors/9
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Nulstil token (rydder JWT fra global variabel)
+GET {{url}}/auth/test/
+
+> {%
+    client.global.set("jwt_token", null);
+    console.log("JWT Token reset:", client.global.get("jwt_token"));
+%}
+
+
+### Printer author og alle authorens quotes
+GET {{url}}/authors/4/quotes
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### Opret quote for eksisterende author
+POST {{url}}/quotes/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "text": "Imagination is more important than knowledge.",
+  "author": {
+    "id": 1
+  },
+  "category": {
+    "id": 1
+  },
+  "user": {
+    "username": "admin"
+  }
+}
+
+
+### Hent author med quotes igen for at teste respons
+GET {{url}}/authors/9/quotes
+Accept: application/json
+Authorization: Bearer {{jwt_token}}

@@ -87,4 +87,11 @@ public class User implements ISecurityUser {
             quote.getFavoritedByUsers().add(this);
         }
     }
+
+    public void removeFavoriteQuote (Quote quote) {
+        this.favoriteQuotes.remove(quote);
+        if (quote != null) {
+            quote.getFavoritedByUsers().remove(this);
+        }
+    }
 }

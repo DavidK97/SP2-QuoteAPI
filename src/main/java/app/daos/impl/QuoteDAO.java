@@ -45,7 +45,7 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
     }
 
     @Override
-    public QuoteDTO create(QuoteDTO quoteDTO) {
+    public QuoteDTO create(QuoteDTO quoteDTO) throws EntityNotFoundException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
@@ -75,6 +75,7 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
                 author.setName(authorDTO.getName());
                 author.setDateOfBirth(authorDTO.getDateOfBirth());
                 author.setCountry(authorDTO.getCountry());
+                author.addQuote(quote);
                 em.persist(author);
             }
 
@@ -126,7 +127,7 @@ public class QuoteDAO implements IDAO<QuoteDTO, Integer> {
     }
 
     @Override
-    public boolean validatePrimaryKey(Integer integer) {
+    public boolean validatePrimaryKey(Integer integer) throws IllegalArgumentException {
         try (EntityManager em = emf.createEntityManager()) {
             Quote quote = em.find(Quote.class, integer);
             return quote != null;

@@ -1,0 +1,180 @@
+package app.daos.impl;
+
+import app.config.HibernateConfig;
+import app.dtos.CategoryDTO;
+import app.exceptions.ApiException;
+import app.populators.QuotePopulator;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import org.junit.jupiter.api.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CategoryDAOTest {
+
+    private EntityManagerFactory emf;
+
+    private CategoryDAO categoryDAO;
+
+    CategoryDTO c1;
+
+    CategoryDTO c2;
+
+    CategoryDTO c3;
+
+    private List<CategoryDTO> categoryDTOList;
+
+    @BeforeAll
+    void initOnce () {
+        emf = HibernateConfig.getEntityManagerFactoryForTest();
+        categoryDAO = new CategoryDAO(emf);
+    }
+
+    @BeforeEach
+    void setUp() {
+        // Restart all tables
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createNativeQuery("TRUNCATE TABLE author, category, quote, role, users, users_favorite_quotes, users_roles RESTART IDENTITY CASCADE")
+                    .executeUpdate();
+            em.getTransaction().commit();
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to truncate tables", e);
+        }
+
+        // Populate tables
+        QuotePopulator.populate(emf);
+        categoryDTOList = categoryDAO.readAll();
+        if (categoryDTOList.size() == 3) {
+            c1 = categoryDTOList.get(0);
+            c2 = categoryDTOList.get(1);
+            c3 = categoryDTOList.get(2);
+        } else {
+            throw new ApiException(500, "Populator doesnt work");
+        }
+    }
+
+
+    @AfterAll
+    void tearDown() {
+        if (emf != null && emf.isOpen()) {
+            emf.close();
+        }
+    }
+
+
+    @Test
+    void getInstance () {
+        assertNotNull(emf);
+    }
+
+
+
+    @Test
+    void read() {
+
+        //Arrange
+        int expectedId = 1;
+
+        //Act
+        CategoryDTO categoryDTO = categoryDAO.read(1);
+
+        //Assert
+        assertEquals(expectedId, categoryDTO.getId());
+
+
+    }
+
+    @Test
+    void readAll() {
+
+        //Arrange
+        List<CategoryDTO> allCategories;
+        int expectedSize = 3;
+
+        //Act
+        allCategories = categoryDAO.readAll();
+
+        //Assert
+        assertEquals(expectedSize, allCategories.size());
+    }
+
+    @Test
+    void create() {
+
+        //Arrange
+        CategoryDTO c4 = CategoryDTO.builder()
+                .title("philosophy")
+                .build();
+
+        int expectedId = 4;
+
+        String expectedTitle = "philosophy";
+
+        //Act
+        CategoryDTO createdCategoryDTO = categoryDAO.create(c4);
+
+
+        //Assert
+        assertEquals(expectedId, createdCategoryDTO.getId());
+        assertEquals(expectedTitle, createdCategoryDTO.getTitle());
+
+    }
+
+    @Test
+    void update() {
+
+        //Arrange
+        CategoryDTO categoryDTO = categoryDAO.read(1);
+
+
+
+        //Act
+        CategoryDTO dtoToUpdate = categoryDAO.update(2, categoryDTO);
+
+
+
+        //Assert
+        assertEquals(categoryDTO.getTitle(), dtoToUpdate.getTitle());
+        assertThat(categoryDTO.getId(), is(1));
+        assertThat(dtoToUpdate.getId(), is(2));
+
+    }
+
+    @Test
+    void delete() {
+
+        //Arrange
+
+
+
+        //Act
+        categoryDAO.delete(1);
+        List<CategoryDTO> newDtoList = categoryDAO.readAll();
+        assertThat(newDtoList, containsInAnyOrder(
+                allOf(hasProperty("title", is(c2.getTitle()))),
+                allOf(hasProperty("title", is(c3.getTitle())))
+        ));
+
+        //assertThat(newDtoList.size(), is(2));
+        //assertThat(newDtoList, containsInAnyOrder(c2, c3));
+
+
+
+
+        //Assert
+
+
+
+    }
+
+    @Test
+    void validatePrimaryKey() {
+    }
+}

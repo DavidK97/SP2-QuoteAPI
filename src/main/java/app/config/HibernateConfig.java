@@ -16,6 +16,7 @@ import org.hibernate.service.ServiceRegistry;
 import java.util.Properties;
 
 public class HibernateConfig {
+
     private static EntityManagerFactory emf;
     private static EntityManagerFactory emfTest;
     private static Boolean isTest = false;
@@ -35,7 +36,7 @@ public class HibernateConfig {
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
-        if (emfTest == null){
+        if (emfTest == null || !emfTest.isOpen()){
             setTest(true);
             emfTest = createEMF(getTest());  // No DB needed for test
         }
@@ -82,7 +83,7 @@ public class HibernateConfig {
 
     private static Properties setBaseProperties(Properties props) {
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", "update");  // set to "update" when in production
+        props.put("hibernate.hbm2ddl.auto", "create-drop");  // set to "update" when in production
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "false");
         props.put("hibernate.format_sql", "false");

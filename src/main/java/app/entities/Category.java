@@ -36,4 +36,8 @@ public class Category {
         this.quotes = new HashSet<>();
     }
 
+    public Category(String title) {
+        this.title = title;
+    }
+
 }

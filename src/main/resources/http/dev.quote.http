@@ -30,13 +30,6 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 
-
-### POST request (create)
-POST {{url}}/poem/
-Content-Type: application/json
-Accept: application/json
-Authorization: Bearer {{jwt_token}}
-
 ### POST request (create)
 POST {{url}}/quotes/
 Content-Type: application/json
@@ -94,7 +87,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### DELETE
-DELETE {{url}}/quotes/1/
+DELETE {{url}}/quotes/3/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 

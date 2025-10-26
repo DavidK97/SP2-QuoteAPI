@@ -5,6 +5,7 @@ import app.controllers.IController;
 import app.daos.impl.QuoteDAO;
 import app.dtos.QuoteDTO;
 import app.entities.Quote;
+import app.exceptions.EntityNotFoundException;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import jakarta.persistence.EntityManagerFactory;
@@ -62,20 +63,27 @@ public class QuoteController implements IController<QuoteDTO, Integer> {
 
     @Override
     public void create(Context ctx) {
-        // Info hentes om client request og det valideres
-        QuoteDTO jsonRequest = validateEntity(ctx);
+        try {
+            // Info hentes om client request og det valideres
+            QuoteDTO jsonRequest = validateEntity(ctx);
 
-        // Quote gemmes
-        QuoteDTO createdQuote = quoteDAO.create(jsonRequest);
+            // Quote gemmes
+            QuoteDTO createdQuote = quoteDAO.create(jsonRequest);
 
-
-        // Response til client
-        if (createdQuote != null) {
-            ctx.status(HttpStatus.CREATED);
-            ctx.json(createdQuote);
-        } else {
-            ctx.status(HttpStatus.BAD_REQUEST);
-            ctx.result("Something went wrong, quote could not be created");
+            // Response til client
+            if (createdQuote != null) {
+                ctx.status(HttpStatus.CREATED);
+                ctx.json(createdQuote);
+            } else {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Something went wrong, quote could not be created");
+            }
+        } catch (EntityNotFoundException e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            ctx.result("Invalid input, try again: " + e.getMessage());
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            ctx.result("Something went wrong: " + e.getMessage());
         }
     }
 
