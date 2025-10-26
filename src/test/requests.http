@@ -25,6 +25,10 @@ Content-Type: application/json
 ### Delete a category
 DELETE http://localhost:7076/api/v1/categories/1
 
+### Get all quotes by category
+GET http://localhost:7076/api/v1/categories/4/quotes
+
+
 
 
 

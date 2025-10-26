@@ -103,19 +103,19 @@ public class CategoryController implements IController<CategoryDTO, Integer> {
                     .get();
     }
 
+    // GET /api/v1/categories/{id}/quotes?limit=50&offset=0
     public void getAllQuotesByCategory(Context ctx) {
+        int categoryId = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Category does not exist.").get();
 
-        String category = ctx.queryParam("category");
-        if(category == null || category.isEmpty()) {
-            ctx.status(400).json("{\"error\": \"Missing category parameter\"}");
-        }
-        List<QuoteDTO> quotes = categoryDAO.getAllQuotesByCategory(category);
+        List<QuoteDTO> quotes = categoryDAO.getAllQuotesByCategory(categoryId);
         if(quotes.isEmpty()) {
-            ctx.status(404).json("{\"error\": \"No quotes found for category: " + category + "\"}");
-
-        } else {
-            ctx.status(200).json(quotes, QuoteDTO.class);
+            ctx.status(400);
+            ctx.result("Quote in category " + categoryId + " was not found");
         }
+
+
+        List<QuoteDTO> quotesByCategory = categoryDAO.getAllQuotesByCategory(categoryId);
+        ctx.status(200).json(quotesByCategory, app.dtos.QuoteDTO.class);
     }
 }
 

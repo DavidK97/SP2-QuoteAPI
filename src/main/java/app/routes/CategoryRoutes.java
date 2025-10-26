@@ -13,14 +13,21 @@ public class CategoryRoutes {
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            // get("/populate", hotelController::populate);
             post("/", categoryController::create, Role.ANYONE);
             get("/", categoryController::readAll, Role.ANYONE);
-            get("/{id}", categoryController::read, Role.ANYONE);
-            put("/{id}", categoryController::update, Role.ANYONE);
-            delete("/{id}", categoryController::delete, Role.ANYONE);
-            get("/", categoryController::getAllQuotesByCategory, Role.ANYONE);
+
+            path("{id}", () -> {
+                get(categoryController::read, Role.ANYONE);
+                put(categoryController::update, Role.ANYONE);
+                delete(categoryController::delete, Role.ANYONE);
+
+
+                path("quotes", () -> {
+                    get(categoryController::getAllQuotesByCategory, Role.ANYONE);
+                });
+            });
         };
     }
 }
+
 
