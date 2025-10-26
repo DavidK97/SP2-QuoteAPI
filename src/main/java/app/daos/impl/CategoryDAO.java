@@ -2,6 +2,7 @@ package app.daos.impl;
 
 import app.daos.IDAO;
 import app.dtos.CategoryDTO;
+import app.dtos.QuoteDTO;
 import app.entities.Category;
 import app.entities.Quote;
 import app.security.entities.User;
@@ -21,7 +22,7 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
 
     @Override
     public CategoryDTO read(Integer id) {
-        try(EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()) {
             Category c = em.find(Category.class, id);
             return new CategoryDTO(c);
         }
@@ -29,7 +30,7 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
 
     @Override
     public List<CategoryDTO> readAll() {
-        try(EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c", Category.class);
             return CategoryDTO.toDTOList(query.getResultList());
         }
@@ -86,11 +87,26 @@ public class CategoryDAO implements IDAO<CategoryDTO, Integer> {
         }
     }
 
+
     @Override
     public boolean validatePrimaryKey(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Category category = em.find(Category.class, integer);
             return category != null;
+        }
+    }
+
+    public List<QuoteDTO> getAllQuotesByCategory(String category) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT new app.dtos.QuoteDTO(q) " +
+                                    "FROM Quote q " +
+                                    "WHERE LOWER(q.category.title) = LOWER(:title) " +
+                                    "ORDER BY q.id",
+                            QuoteDTO.class)
+                    .setParameter("title", category.trim())
+                    .getResultList();
+
         }
     }
 }

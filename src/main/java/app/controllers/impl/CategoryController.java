@@ -4,6 +4,7 @@ import app.config.HibernateConfig;
 import app.controllers.IController;
 import app.daos.impl.CategoryDAO;
 import app.dtos.CategoryDTO;
+import app.dtos.QuoteDTO;
 import app.entities.Category;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -100,6 +101,21 @@ public class CategoryController implements IController<CategoryDTO, Integer> {
             return ctx.bodyValidator(CategoryDTO.class)
                     .check( c -> c.getTitle() != null && !c.getTitle().isEmpty(), "Title must be set")
                     .get();
+    }
+
+    public void getAllQuotesByCategory(Context ctx) {
+
+        String category = ctx.queryParam("category");
+        if(category == null || category.isEmpty()) {
+            ctx.status(400).json("{\"error\": \"Missing category parameter\"}");
+        }
+        List<QuoteDTO> quotes = categoryDAO.getAllQuotesByCategory(category);
+        if(quotes.isEmpty()) {
+            ctx.status(404).json("{\"error\": \"No quotes found for category: " + category + "\"}");
+
+        } else {
+            ctx.status(200).json(quotes, QuoteDTO.class);
+        }
     }
 }
 
